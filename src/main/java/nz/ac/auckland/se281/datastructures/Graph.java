@@ -1,5 +1,7 @@
 package nz.ac.auckland.se281.datastructures;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -11,11 +13,44 @@ import java.util.Set;
  * @param <T> The type of each vertex, that have a total ordering.
  */
 public class Graph<T extends Comparable<T>> {
-  public Graph(Set<T> verticies, Set<Edge<T>> edges) {}
+  // intialise vertices and edges
+  private Set<T> verticies;
+  private Set<Edge<T>> edges;
+  // create a new set of type T for the roots
+  private Set<T> roots = new HashSet<T>();
+  private ArrayList<T> source = new ArrayList<T>();
+  private ArrayList<T> destination = new ArrayList<T>();
+
+  public Graph(Set<T> verticies, Set<Edge<T>> edges) {
+    this.verticies = verticies;
+    this.edges = edges;
+    System.out.println("verticies: " + verticies);
+    // list out the edges
+    for (Edge<T> edge : edges) {
+      System.out.println("Source: " + edge.getSource());
+      System.out.println("Destination: " + edge.getDestination());
+    }
+  }
 
   public Set<T> getRoots() {
     // TODO: Task 1.
-    throw new UnsupportedOperationException();
+    for (Edge<T> edge : edges) {
+      source.add(edge.getSource());
+      destination.add(edge.getDestination());
+    }
+    System.out.println(source);
+    System.out.println(destination);
+    for (T vertex : verticies) {
+      if (!destination.contains(vertex)) {
+        roots.add(vertex);
+        // System.out.println(roots);
+      }
+    }
+    // if (roots.isEmpty()) {
+    //   throw new UnsupportedOperationException();
+    // } else {
+    return roots;
+    // }
   }
 
   public boolean isReflexive() {
