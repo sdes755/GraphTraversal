@@ -18,9 +18,8 @@ public class Graph<T extends Comparable<T>> {
   private Set<T> verticies;
   private Set<Edge<T>> edges;
   private Set<T> roots = new HashSet<T>();
-  private ArrayList<T> source = new ArrayList<T>();
-  private ArrayList<T> destination = new ArrayList<T>();
-  private ArrayList<T> selfloops = new ArrayList<T>();
+  private T check;
+  private T symmetric;
 
   public Graph(Set<T> verticies, Set<Edge<T>> edges) {
     this.verticies = verticies;
@@ -29,6 +28,8 @@ public class Graph<T extends Comparable<T>> {
 
   public Set<T> getRoots() {
     // TODO: Task 1.
+    ArrayList<T> source = new ArrayList<T>();
+    ArrayList<T> destination = new ArrayList<T>();
     source = getSource();
     destination = getDestination();
     for (int i = 0; i < source.size(); i++) {
@@ -47,6 +48,9 @@ public class Graph<T extends Comparable<T>> {
 
   public boolean isReflexive() {
     // TODO: Task 1.
+    ArrayList<T> destination = new ArrayList<T>();
+    ArrayList<T> source = new ArrayList<T>();
+    ArrayList<T> selfloops = new ArrayList<T>();
     source = getSource();
     destination = getDestination();
     for (int i = 0; i < source.size(); i++) {
@@ -63,7 +67,21 @@ public class Graph<T extends Comparable<T>> {
 
   public boolean isSymmetric() {
     // TODO: Task 1.
-    throw new UnsupportedOperationException();
+    ArrayList<T> destination = new ArrayList<T>();
+    ArrayList<T> source = new ArrayList<T>();
+    Set<T> reflexive = new HashSet<T>();
+    source = getSource();
+    destination = getDestination();
+    for (int j = 0; j < source.size(); j++) {
+      for (int i = 0; i < source.size(); i++) {
+        check = source.get(j);
+        symmetric = destination.get(j);
+        if (source.get(i) == symmetric && destination.get(i) == check) {
+          reflexive.add(check);
+        }
+      }
+    }
+    return reflexive.equals(verticies);
   }
 
   public boolean isTransitive() {
@@ -73,7 +91,25 @@ public class Graph<T extends Comparable<T>> {
 
   public boolean isAntiSymmetric() {
     // TODO: Task 1.
-    throw new UnsupportedOperationException();
+    ArrayList<T> destination = new ArrayList<T>();
+    ArrayList<T> source = new ArrayList<T>();
+    Set<T> reflexive = new HashSet<T>();
+    source = getSource();
+    destination = getDestination();
+    for (int j = 0; j < source.size(); j++) {
+      for (int i = 0; i < source.size(); i++) {
+        check = source.get(j);
+        symmetric = destination.get(j);
+        if (source.get(i) == symmetric && destination.get(i) == check) {
+          reflexive.add(check);
+        }
+      }
+    }
+    if (reflexive.size() == 0) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   public boolean isEquivalence() {
@@ -107,6 +143,7 @@ public class Graph<T extends Comparable<T>> {
   }
 
   public ArrayList<T> getSource() {
+    ArrayList<T> source = new ArrayList<T>();
     for (Edge<T> edge : edges) {
       source.add(edge.getSource());
     }
@@ -114,6 +151,7 @@ public class Graph<T extends Comparable<T>> {
   }
 
   public ArrayList<T> getDestination() {
+    ArrayList<T> destination = new ArrayList<T>();
     for (Edge<T> edge : edges) {
       destination.add(edge.getDestination());
     }
