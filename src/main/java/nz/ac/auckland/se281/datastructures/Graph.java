@@ -29,20 +29,14 @@ public class Graph<T extends Comparable<T>> {
 
   public Set<T> getRoots() {
     // TODO: Task 1.
-    for (Edge<T> edge : edges) {
-      source.add(edge.getSource());
-      destination.add(edge.getDestination());
-    }
+    source = getSource();
+    destination = getDestination();
     for (int i = 0; i < source.size(); i++) {
       if (source.get(i) == destination.get(i)
           && Collections.frequency(source, source.get(i)) == 1) {
         roots.add(source.get(i));
       }
-      if (source.get(i) == destination.get(i)) {
-        selfloops.add(source.get(i));
-      }
     }
-    System.out.println(selfloops);
     for (T vertex : verticies) {
       if (!destination.contains(vertex)) {
         roots.add(vertex);
@@ -53,6 +47,13 @@ public class Graph<T extends Comparable<T>> {
 
   public boolean isReflexive() {
     // TODO: Task 1.
+    source = getSource();
+    destination = getDestination();
+    for (int i = 0; i < source.size(); i++) {
+      if (source.get(i) == destination.get(i)) {
+        selfloops.add(source.get(i));
+      }
+    }
     if (selfloops.size() != 0) {
       return true;
     } else {
@@ -103,5 +104,19 @@ public class Graph<T extends Comparable<T>> {
   public List<T> recursiveDepthFirstSearch() {
     // TODO: Task 3.
     throw new UnsupportedOperationException();
+  }
+
+  public ArrayList<T> getSource() {
+    for (Edge<T> edge : edges) {
+      source.add(edge.getSource());
+    }
+    return source;
+  }
+
+  public ArrayList<T> getDestination() {
+    for (Edge<T> edge : edges) {
+      destination.add(edge.getDestination());
+    }
+    return destination;
   }
 }
