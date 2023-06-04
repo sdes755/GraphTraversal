@@ -17,7 +17,6 @@ public class Graph<T extends Comparable<T>> {
   // intialise vertices and edges
   private Set<T> verticies;
   private Set<Edge<T>> edges;
-  private Set<T> roots = new HashSet<T>();
   private T check;
   private T symmetric;
 
@@ -30,6 +29,8 @@ public class Graph<T extends Comparable<T>> {
     // TODO: Task 1.
     ArrayList<T> source = new ArrayList<T>();
     ArrayList<T> destination = new ArrayList<T>();
+    Set<T> equivalenceClass = new HashSet<T>();
+    Set<T> roots = new HashSet<T>();
     source = getSource();
     destination = getDestination();
     for (int i = 0; i < source.size(); i++) {
@@ -42,7 +43,16 @@ public class Graph<T extends Comparable<T>> {
       if (!destination.contains(vertex)) {
         roots.add(vertex);
       }
+      for (int i = 0; i < source.size(); i++) {
+        equivalenceClass = getEquivalenceClass(source.get(i));
+      }
+      System.out.println(equivalenceClass);
+      for (T equivalence : equivalenceClass) {
+        roots.add(equivalence);
+        break;
+      }
     }
+
     return roots;
   }
 
@@ -50,7 +60,7 @@ public class Graph<T extends Comparable<T>> {
     // TODO: Task 1.
     ArrayList<T> destination = new ArrayList<T>();
     ArrayList<T> source = new ArrayList<T>();
-    ArrayList<T> selfloops = new ArrayList<T>();
+    Set<T> selfloops = new HashSet<T>();
     source = getSource();
     destination = getDestination();
     for (int i = 0; i < source.size(); i++) {
@@ -58,7 +68,7 @@ public class Graph<T extends Comparable<T>> {
         selfloops.add(source.get(i));
       }
     }
-    if (selfloops.size() != 0) {
+    if (selfloops.equals(verticies)) {
       return true;
     } else {
       return false;
@@ -86,7 +96,32 @@ public class Graph<T extends Comparable<T>> {
 
   public boolean isTransitive() {
     // TODO: Task 1.
-    throw new UnsupportedOperationException();
+    ArrayList<T> destination = new ArrayList<T>();
+    ArrayList<T> source = new ArrayList<T>();
+    Set<T> transitive = new HashSet<T>();
+    source = getSource();
+    destination = getDestination();
+    // check if the graph is transitive
+    for (int i = 0; i < source.size(); i++) {
+      if (source.get(i) != destination.get(i)) {
+        for (int j = 0; j < source.size(); j++) {
+          if (destination.get(i) == source.get(j)
+              && source.get(j) != destination.get(j)
+              && destination.get(j) != source.get(i)) {
+            for (int k = 0; k < source.size(); k++) {
+              if (destination.get(j) == destination.get(k) && source.get(i) == source.get(k)) {
+                transitive.add(source.get(i));
+              }
+            }
+          }
+        }
+      }
+    }
+    if (transitive.size() == 0) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   public boolean isAntiSymmetric() {
@@ -114,12 +149,30 @@ public class Graph<T extends Comparable<T>> {
 
   public boolean isEquivalence() {
     // TODO: Task 1.
-    throw new UnsupportedOperationException();
+    if (isReflexive() && isSymmetric() && isTransitive()) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   public Set<T> getEquivalenceClass(T vertex) {
     // TODO: Task 1.
-    throw new UnsupportedOperationException();
+    Set<T> equivalenceClass = new HashSet<T>();
+    ArrayList<T> source = new ArrayList<>();
+    ArrayList<T> destination = new ArrayList<>();
+    source = getSource();
+    destination = getDestination();
+
+    if (!isEquivalence()) {
+      return equivalenceClass;
+    }
+    for (int i = 0; i < source.size(); i++) {
+      if (vertex.equals(source.get(i))) {
+        equivalenceClass.add(destination.get(i));
+      }
+    }
+    return equivalenceClass;
   }
 
   public List<T> iterativeBreadthFirstSearch() {
