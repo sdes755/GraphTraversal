@@ -3,11 +3,8 @@ package nz.ac.auckland.se281.datastructures;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.Set;
-import java.util.Stack;
 import java.util.TreeSet;
 
 /**
@@ -192,19 +189,20 @@ public class Graph<T extends Comparable<T>> {
     ArrayList<T> destination = new ArrayList<T>();
     List<T> bfs_traversal = new ArrayList<T>();
     ArrayList<T> visited = new ArrayList<T>();
-    Queue<T> queue = new LinkedList<T>();
+    // create an object of the queue class
+    QueueStructure<T> queue = new QueueStructure<T>();
     source = getSource();
     destination = getDestination();
     for (T root : roots) {
       for (int i = 0; i < source.size(); i++) {
         if (source.get(i).equals(root)) {
-          queue.add(source.get(i));
+          queue.enqueue(source.get(i));
           break;
         }
       }
       while (!queue.isEmpty()) {
         T vertex = queue.peek();
-        queue.poll();
+        queue.dequeue();
         if (!visited.contains(vertex)) {
           visited.add(vertex);
           bfs_traversal.add(vertex);
@@ -213,7 +211,7 @@ public class Graph<T extends Comparable<T>> {
           if (source.get(i).hashCode() == vertex.hashCode()) {
             if (source.get(i).equals(vertex)) {
               if (!visited.contains(destination.get(i))) {
-                queue.add(destination.get(i));
+                queue.enqueue(destination.get(i));
               }
             }
           }
@@ -225,34 +223,7 @@ public class Graph<T extends Comparable<T>> {
 
   public List<T> iterativeDepthFirstSearch() {
     Set<T> roots = getRoots();
-    List<T> dfsTraversal = new ArrayList<>();
-    Set<T> visited = new HashSet<>();
-    Stack<T> stack = new Stack<>();
-
-    for (T root : roots) {
-      stack.push(root);
-
-      while (!stack.isEmpty()) {
-        T vertex = stack.pop();
-
-        if (!visited.contains(vertex)) {
-          visited.add(vertex);
-          dfsTraversal.add(vertex);
-
-          // Get the neighbors of the current vertex
-          List<T> neighbors = getNeighbors(vertex);
-
-          // Push unvisited neighbors onto the stack
-          for (T neighbor : neighbors) {
-            if (!visited.contains(neighbor)) {
-              stack.push(neighbor);
-            }
-          }
-        }
-      }
-    }
-
-    return dfsTraversal;
+    throw new UnsupportedOperationException();
   }
 
   public List<T> recursiveBreadthFirstSearch() {
@@ -279,15 +250,5 @@ public class Graph<T extends Comparable<T>> {
       destination.add(edge.getDestination());
     }
     return destination;
-  }
-
-  public List<T> getNeighbors(T vertex) {
-    List<T> neighbors = new ArrayList<>();
-    for (Edge<T> edge : edges) {
-      if (edge.getSource().equals(vertex)) {
-        neighbors.add(edge.getDestination());
-      }
-    }
-    return neighbors;
   }
 }
