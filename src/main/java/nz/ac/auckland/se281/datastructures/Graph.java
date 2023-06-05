@@ -275,9 +275,10 @@ public class Graph<T extends Comparable<T>> {
     ArrayList<T> source = getSource();
     ArrayList<T> destination = getDestination();
     ArrayList<T> visited = new ArrayList<>();
+    StackStructure<T> stack = new StackStructure<T>();
 
     for (T root : roots) {
-      recursiveDFS(root, traversalResult, visited, source, destination);
+      recursiveDFS(root, traversalResult, visited, source, destination, stack);
     }
 
     return traversalResult;
@@ -337,12 +338,13 @@ public class Graph<T extends Comparable<T>> {
     }
   }
 
-  public void recursiveDFS(
+  private void recursiveDFS(
       T vertex,
       List<T> traversalResult,
       List<T> visited,
       ArrayList<T> source,
-      ArrayList<T> destination) {
+      ArrayList<T> destination,
+      StackStructure<T> stack) {
     if (!visited.contains(vertex)) {
       visited.add(vertex);
       traversalResult.add(vertex);
@@ -357,7 +359,16 @@ public class Graph<T extends Comparable<T>> {
 
     for (T neighbor : neighbors) {
       if (!visited.contains(neighbor)) {
-        recursiveDFS(neighbor, traversalResult, visited, source, destination);
+        stack.push(neighbor);
+        recursiveDFS(neighbor, traversalResult, visited, source, destination, stack);
+      }
+    }
+
+    if (!stack.isEmpty()) {
+      stack.pop();
+      if (!stack.isEmpty()) {
+        T nextVertex = stack.peek();
+        recursiveDFS(nextVertex, traversalResult, visited, source, destination, stack);
       }
     }
   }
