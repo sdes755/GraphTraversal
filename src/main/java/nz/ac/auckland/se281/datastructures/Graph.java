@@ -224,26 +224,44 @@ public class Graph<T extends Comparable<T>> {
   public List<T> iterativeDepthFirstSearch() {
     Set<T> roots = getRoots();
     List<T> traversalResult = new ArrayList<>();
+    StackStructure<T> stack = new StackStructure<T>();
+    ArrayList<T> source = new ArrayList<T>();
+    ArrayList<T> destination = new ArrayList<T>();
+    ArrayList<T> visited = new ArrayList<T>();
+    source = getSource();
+    destination = getDestination();
 
     for (T root : roots) {
-      if (!traversalResult.contains(root)) {
-        StackStructure<T> stack = new StackStructure<>();
-        stack.push(root);
+      for (int i = 0; i < source.size(); i++) {
+        if (source.get(i).equals(root)) {
+          stack.push(source.get(i));
+          break;
+        }
+      }
 
-        while (!stack.isEmpty()) {
-          T current = stack.pop();
+      while (!stack.isEmpty()) {
+        T vertex = stack.peek();
+        stack.pop();
 
-          if (!traversalResult.contains(current)) {
-            traversalResult.add(current);
+        if (!visited.contains(vertex)) {
+          visited.add(vertex);
+          traversalResult.add(vertex);
+        }
 
-            Node<T> node = getNode(current);
-            List<T> neighbors = node.getNeighbors();
-            for (T neighbor : neighbors) {
-              if (!traversalResult.contains(neighbor)) {
-                stack.push(neighbor);
+        List<T> neighbors = new ArrayList<>();
+        for (int i = 0; i < source.size(); i++) {
+          if (source.get(i).hashCode() == vertex.hashCode()) {
+            if (source.get(i).equals(vertex)) {
+              if (!visited.contains(destination.get(i))) {
+                neighbors.add(destination.get(i));
               }
             }
           }
+        }
+
+        Collections.sort(neighbors);
+        for (int i = neighbors.size() - 1; i >= 0; i--) {
+          stack.push(neighbors.get(i));
         }
       }
     }
@@ -275,14 +293,5 @@ public class Graph<T extends Comparable<T>> {
       destination.add(edge.getDestination());
     }
     return destination;
-  }
-
-  private Node<T> getNode(T value) {
-    for (Node<T> node : nodes) {
-      if (node.getValue().equals(value)) {
-        return node;
-      }
-    }
-    return null; // Node with specified value not found
   }
 }
