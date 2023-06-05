@@ -256,27 +256,28 @@ public class Graph<T extends Comparable<T>> {
 
   public List<T> recursiveBreadthFirstSearch() {
     Set<T> roots = getRoots();
-    List<T> traversalResult = new ArrayList<>();
-    Set<T> visited = new HashSet<>();
+    ArrayList<T> source = getSource();
+    ArrayList<T> destination = getDestination();
+    List<T> bfsTraversal = new ArrayList<T>();
+    ArrayList<T> visited = new ArrayList<T>();
+    QueueStructure<T> queue = new QueueStructure<T>();
 
     for (T root : roots) {
-      if (!visited.contains(root)) {
-        recursiveBFS(root, visited, traversalResult);
-      }
+      recursiveBFS(root, source, destination, queue, visited, bfsTraversal);
     }
 
-    return traversalResult;
+    return bfsTraversal;
   }
 
   public List<T> recursiveDepthFirstSearch() {
     Set<T> roots = getRoots();
     List<T> traversalResult = new ArrayList<>();
-    Set<T> visited = new HashSet<>();
+    ArrayList<T> source = getSource();
+    ArrayList<T> destination = getDestination();
+    ArrayList<T> visited = new ArrayList<>();
 
     for (T root : roots) {
-      if (!visited.contains(root)) {
-        recursiveDFS(root, visited, traversalResult);
-      }
+      recursiveDFS(root, traversalResult, visited, source, destination);
     }
 
     return traversalResult;
@@ -308,80 +309,55 @@ public class Graph<T extends Comparable<T>> {
     }
   }
 
-  private void recursiveBFS(T vertex, Set<T> visited, List<T> traversalResult) {
-    Set<T> roots = getRoots();
+  public void recursiveBFS(
+      T vertex,
+      ArrayList<T> source,
+      ArrayList<T> destination,
+      QueueStructure<T> queue,
+      ArrayList<T> visited,
+      List<T> bfsTraversal) {
+    if (!visited.contains(vertex)) {
+      visited.add(vertex);
+      bfsTraversal.add(vertex);
+    }
 
-    ArrayList<T> source = new ArrayList<T>();
-    ArrayList<T> destination = new ArrayList<T>();
-
-    // create an object of the queue class
-    QueueStructure<T> queue = new QueueStructure<T>();
-    source = getSource();
-    destination = getDestination();
-    for (T root : roots) {
-      for (int i = 0; i < source.size(); i++) {
-        if (source.get(i).equals(root)) {
-          queue.enqueue(source.get(i));
-          break;
-        }
-      }
-      while (!queue.isEmpty()) {
-        vertex = queue.peek();
-        queue.dequeue();
-        if (!visited.contains(vertex)) {
-          visited.add(vertex);
-          traversalResult.add(vertex);
-        }
-        for (int i = 0; i < source.size(); i++) {
-          if (source.get(i).hashCode() == vertex.hashCode()) {
-            if (source.get(i).equals(vertex)) {
-              if (!visited.contains(destination.get(i))) {
-                queue.enqueue(destination.get(i));
-              }
-            }
-          }
+    for (int i = 0; i < source.size(); i++) {
+      if (source.get(i).hashCode() == vertex.hashCode() && source.get(i).equals(vertex)) {
+        T destinationVertex = destination.get(i);
+        if (!visited.contains(destinationVertex)) {
+          queue.enqueue(destinationVertex);
         }
       }
     }
+
+    if (!queue.isEmpty()) {
+      T nextVertex = queue.peek();
+      queue.dequeue();
+      recursiveBFS(nextVertex, source, destination, queue, visited, bfsTraversal);
+    }
   }
 
-  private void recursiveDFS(T vertex, Set<T> visited, List<T> traversalResult) {
-    Set<T> roots = getRoots();
+  public void recursiveDFS(
+      T vertex,
+      List<T> traversalResult,
+      List<T> visited,
+      ArrayList<T> source,
+      ArrayList<T> destination) {
+    if (!visited.contains(vertex)) {
+      visited.add(vertex);
+      traversalResult.add(vertex);
+    }
 
-    StackStructure<T> stack = new StackStructure<T>();
-    ArrayList<T> source = getSource();
-    ArrayList<T> destination = getDestination();
+    List<T> neighbors = new ArrayList<>();
+    for (int i = 0; i < source.size(); i++) {
+      if (source.get(i).equals(vertex) && !visited.contains(destination.get(i))) {
+        neighbors.add(destination.get(i));
+      }
+    }
 
-    for (T root : roots) {
-      stack.push(root);
-
-      while (!stack.isEmpty()) {
-        vertex = stack.peek();
-
-        if (!visited.contains(vertex)) {
-          visited.add(vertex);
-          traversalResult.add(vertex);
-        }
-
-        boolean allNeighborsVisited = true;
-        List<T> neighbors = new ArrayList<>();
-        for (int i = 0; i < source.size(); i++) {
-          if (source.get(i).equals(vertex) && !visited.contains(destination.get(i))) {
-            neighbors.add(destination.get(i));
-          }
-        }
-
-        for (T neighbor : neighbors) {
-          if (!visited.contains(neighbor)) {
-            stack.push(neighbor);
-            allNeighborsVisited = false;
-            break;
-          }
-        }
-
-        if (allNeighborsVisited) {
-          stack.pop();
-        }
+    for (T neighbor : neighbors) {
+      if (!visited.contains(neighbor)) {
+        recursiveDFS(neighbor, traversalResult, visited, source, destination);
       }
     }
   }
