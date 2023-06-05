@@ -3,7 +3,9 @@ package nz.ac.auckland.se281.datastructures;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -51,20 +53,20 @@ public class Graph<T extends Comparable<T>> {
         break;
       }
     }
-    // change roots to int
-    Set<Integer> rootsInt = new TreeSet<Integer>();
-    // order the ints smallest to biggest
-    for (T root : roots) {
-      rootsInt.add(Integer.parseInt(root.toString()));
-    }
-    // change rootsInt back to set<T>
-    Set<T> rootsT = new TreeSet<T>();
-    // change it back
-    for (Integer root : rootsInt) {
-      rootsT.add((T) root);
-    }
+    // // change roots to int
+    // Set<Integer> rootsInt = new TreeSet<Integer>();
+    // // order the ints smallest to biggest
+    // for (T root : roots) {
+    //   rootsInt.add(Integer.parseInt(root.toString()));
+    // }
+    // // change rootsInt back to set<T>
+    // Set<T> rootsT = new TreeSet<T>();
+    // // change it back
+    // for (Integer root : rootsInt) {
+    //   rootsT.add((T) root);
+    // }
 
-    return rootsT;
+    return roots;
   }
 
   public boolean isReflexive() {
@@ -184,32 +186,38 @@ public class Graph<T extends Comparable<T>> {
     // TODO: Task 2.
     // throw new UnsupportedOperationException();
     Set<T> roots = getRoots();
-    T startingR = null;
+
     ArrayList<T> source = new ArrayList<T>();
     ArrayList<T> destination = new ArrayList<T>();
+    List<T> bfs_traversal = new ArrayList<T>();
+    ArrayList<T> visited = new ArrayList<T>();
+    Queue<T> queue = new LinkedList<T>();
     source = getSource();
     destination = getDestination();
     for (T root : roots) {
-      startingR = root;
-      break;
-    }
-
-    List<T> bfs_traversal = new ArrayList<T>();
-    ArrayList<T> visited = new ArrayList<T>();
-    ArrayList<T> queue = new ArrayList<T>();
-    // run a bfs search from the root of the graph
-    queue.add(startingR);
-    while (queue.size() != 0) {
-      T current = queue.get(0);
-      queue.remove(0);
-      if (!visited.contains(current)) {
-        visited.add(current);
-        bfs_traversal.add(current);
-      }
       for (int i = 0; i < source.size(); i++) {
-        if (source.get(i) == current) {
-          if (!visited.contains(destination.get(i))) {
-            queue.add(destination.get(i));
+        if (source.get(i).equals(root)) {
+          queue.add(source.get(i));
+          break;
+        }
+      }
+      while (!queue.isEmpty()) {
+        T vertex = queue.peek();
+        queue.poll();
+        if (!visited.contains(vertex)) {
+          visited.add(vertex);
+          bfs_traversal.add(vertex);
+        }
+        for (int i = 0; i < source.size(); i++) {
+          // check if the source is the current vertex
+          // System.out.println(source.get(i).hashCode() + " " + vertex.hashCode());
+          if (source.get(i).hashCode() == vertex.hashCode()) {
+            if (source.get(i).equals(vertex)) {
+              // check if the destination is not visited
+              if (!visited.contains(destination.get(i))) {
+                queue.add(destination.get(i));
+              }
+            }
           }
         }
       }
