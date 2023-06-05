@@ -152,7 +152,7 @@ public class Graph<T extends Comparable<T>> {
   }
 
   public Set<T> getEquivalenceClass(T vertex) {
-    Set<T> equivalenceClass = new HashSet<T>();
+    Set<T> equivalenceClass = new TreeSet<>(new NumericalComparator());
     ArrayList<T> source = new ArrayList<>();
     ArrayList<T> destination = new ArrayList<>();
     source = getSource();
