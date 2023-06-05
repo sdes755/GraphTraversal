@@ -270,8 +270,11 @@ public class MainTest {
     }
 
     @Test
-    public void TY_01_your_own_test() throws Exception {
-      // Write your own test here, in the same format as the other tests.
+    public void TY_01_I_check_roots() throws Exception {
+      runCommands(OPEN_FILE, "i.txt", LIST_ROOT_VERTICIES);
+      assertContains("Successfully opened graph from file i.txt");
+      assertContains("[0, 2, 10, 12, 20, 100]");
+      assertDoesNotContain("[0, 10, 12, 100, 2, 20]");
     }
   }
 }

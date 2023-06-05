@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * A graph that is composed of a set of verticies and edges.
@@ -26,11 +27,10 @@ public class Graph<T extends Comparable<T>> {
   }
 
   public Set<T> getRoots() {
-    // TODO: Task 1.
     ArrayList<T> source = new ArrayList<T>();
     ArrayList<T> destination = new ArrayList<T>();
     Set<T> equivalenceClass = new HashSet<T>();
-    Set<T> roots = new HashSet<T>();
+    Set<T> roots = new TreeSet<T>();
     source = getSource();
     destination = getDestination();
     for (int i = 0; i < source.size(); i++) {
@@ -46,18 +46,28 @@ public class Graph<T extends Comparable<T>> {
       for (int i = 0; i < source.size(); i++) {
         equivalenceClass = getEquivalenceClass(source.get(i));
       }
-      System.out.println(equivalenceClass);
       for (T equivalence : equivalenceClass) {
         roots.add(equivalence);
         break;
       }
     }
+    // change roots to int
+    Set<Integer> rootsInt = new TreeSet<Integer>();
+    // order the ints smallest to biggest
+    for (T root : roots) {
+      rootsInt.add(Integer.parseInt(root.toString()));
+    }
+    // change rootsInt back to set<T>
+    Set<T> rootsT = new TreeSet<T>();
+    // change it back
+    for (Integer root : rootsInt) {
+      rootsT.add((T) root);
+    }
 
-    return roots;
+    return rootsT;
   }
 
   public boolean isReflexive() {
-    // TODO: Task 1.
     ArrayList<T> destination = new ArrayList<T>();
     ArrayList<T> source = new ArrayList<T>();
     Set<T> selfloops = new HashSet<T>();
@@ -76,7 +86,6 @@ public class Graph<T extends Comparable<T>> {
   }
 
   public boolean isSymmetric() {
-    // TODO: Task 1.
     ArrayList<T> destination = new ArrayList<T>();
     ArrayList<T> source = new ArrayList<T>();
     Set<T> reflexive = new HashSet<T>();
@@ -95,7 +104,6 @@ public class Graph<T extends Comparable<T>> {
   }
 
   public boolean isTransitive() {
-    // TODO: Task 1.
     ArrayList<T> destination = new ArrayList<T>();
     ArrayList<T> source = new ArrayList<T>();
     Set<T> transitive = new HashSet<T>();
@@ -125,7 +133,6 @@ public class Graph<T extends Comparable<T>> {
   }
 
   public boolean isAntiSymmetric() {
-    // TODO: Task 1.
     ArrayList<T> destination = new ArrayList<T>();
     ArrayList<T> source = new ArrayList<T>();
     Set<T> reflexive = new HashSet<T>();
@@ -148,7 +155,6 @@ public class Graph<T extends Comparable<T>> {
   }
 
   public boolean isEquivalence() {
-    // TODO: Task 1.
     if (isReflexive() && isSymmetric() && isTransitive()) {
       return true;
     } else {
@@ -157,7 +163,6 @@ public class Graph<T extends Comparable<T>> {
   }
 
   public Set<T> getEquivalenceClass(T vertex) {
-    // TODO: Task 1.
     Set<T> equivalenceClass = new HashSet<T>();
     ArrayList<T> source = new ArrayList<>();
     ArrayList<T> destination = new ArrayList<>();
@@ -177,7 +182,39 @@ public class Graph<T extends Comparable<T>> {
 
   public List<T> iterativeBreadthFirstSearch() {
     // TODO: Task 2.
-    throw new UnsupportedOperationException();
+    // throw new UnsupportedOperationException();
+    Set<T> roots = getRoots();
+    T startingR = null;
+    ArrayList<T> source = new ArrayList<T>();
+    ArrayList<T> destination = new ArrayList<T>();
+    source = getSource();
+    destination = getDestination();
+    for (T root : roots) {
+      startingR = root;
+      break;
+    }
+
+    List<T> bfs_traversal = new ArrayList<T>();
+    ArrayList<T> visited = new ArrayList<T>();
+    ArrayList<T> queue = new ArrayList<T>();
+    // run a bfs search from the root of the graph
+    queue.add(startingR);
+    while (queue.size() != 0) {
+      T current = queue.get(0);
+      queue.remove(0);
+      if (!visited.contains(current)) {
+        visited.add(current);
+        bfs_traversal.add(current);
+      }
+      for (int i = 0; i < source.size(); i++) {
+        if (source.get(i) == current) {
+          if (!visited.contains(destination.get(i))) {
+            queue.add(destination.get(i));
+          }
+        }
+      }
+    }
+    return bfs_traversal;
   }
 
   public List<T> iterativeDepthFirstSearch() {

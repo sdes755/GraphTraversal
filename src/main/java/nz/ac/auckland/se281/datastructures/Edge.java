@@ -39,7 +39,7 @@ public class Edge<T> {
     if (this == obj) return true;
     if (obj == null) return false;
     if (getClass() != obj.getClass()) return false;
-    Edge<T> other = (Edge<T>) obj;
+    Edge<T> other = (Edge) obj;
     if (source == null) {
       if (other.source != null) return false;
     } else if (!source.equals(other.source)) return false;
