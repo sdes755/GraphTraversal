@@ -338,7 +338,7 @@ public class Graph<T extends Comparable<T>> {
     }
   }
 
-  private void recursiveDFS(
+  public void recursiveDFS(
       T vertex,
       List<T> traversalResult,
       List<T> visited,
