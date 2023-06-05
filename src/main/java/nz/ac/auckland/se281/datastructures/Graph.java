@@ -212,54 +212,41 @@ public class Graph<T extends Comparable<T>> {
 
   public List<T> iterativeDepthFirstSearch() {
     Set<T> roots = getRoots();
-    System.out.println(roots);
     List<T> traversalResult = new ArrayList<>();
     StackStructure<T> stack = new StackStructure<T>();
-    ArrayList<T> source = new ArrayList<T>();
-    ArrayList<T> destination = new ArrayList<T>();
-    ArrayList<T> visited = new ArrayList<T>();
-    source = getSource();
-    destination = getDestination();
+    ArrayList<T> source = getSource();
+    ArrayList<T> destination = getDestination();
+    ArrayList<T> visited = new ArrayList<>();
 
     for (T root : roots) {
-      for (int i = 0; i < source.size(); i++) {
-        if (source.get(i).equals(root)) {
-          stack.push(source.get(i));
-          break;
-        }
-      }
+      stack.push(root);
 
       while (!stack.isEmpty()) {
         T vertex = stack.peek();
-        stack.pop();
 
         if (!visited.contains(vertex)) {
           visited.add(vertex);
           traversalResult.add(vertex);
         }
 
+        boolean allNeighborsVisited = true;
         List<T> neighbors = new ArrayList<>();
         for (int i = 0; i < source.size(); i++) {
-          if (source.get(i).hashCode() == vertex.hashCode()) {
-            if (source.get(i).equals(vertex)) {
-              if (!visited.contains(destination.get(i))) {
-                neighbors.add(destination.get(i));
-              }
-            }
+          if (source.get(i).equals(vertex) && !visited.contains(destination.get(i))) {
+            neighbors.add(destination.get(i));
           }
         }
 
-        Collections.sort(neighbors);
-        boolean smallestNeighborPushed = false;
         for (T neighbor : neighbors) {
-          if (!smallestNeighborPushed) {
+          if (!visited.contains(neighbor)) {
             stack.push(neighbor);
-            smallestNeighborPushed = true;
-          } else {
-            if (!visited.contains(neighbor)) {
-              stack.push(neighbor);
-            }
+            allNeighborsVisited = false;
+            break;
           }
+        }
+
+        if (allNeighborsVisited) {
+          stack.pop();
         }
       }
     }

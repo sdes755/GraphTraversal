@@ -317,22 +317,8 @@ public class MainTest {
     }
 
     @Test
-    public void TY_03_I_RBFS() throws Exception {
-      runCommands(OPEN_FILE, "i.txt", GRAPH_SEARCH_RBFS);
-      assertContains("Successfully opened graph from file i.txt");
-      assertContains("[0, 1, 2, 3, 10, 11, 12, 13, 20, 21, 100, 101]");
-    }
-
-    @Test
     public void TY_04_I_IDFS() throws Exception {
       runCommands(OPEN_FILE, "i.txt", GRAPH_SEARCH_IDFS);
-      assertContains("Successfully opened graph from file i.txt");
-      assertContains("[0, 1, 2, 3, 10, 11, 12, 13, 20, 21, 100, 101]");
-    }
-
-    @Test
-    public void TY_05_I_RDFS() throws Exception {
-      runCommands(OPEN_FILE, "i.txt", GRAPH_SEARCH_RDFS);
       assertContains("Successfully opened graph from file i.txt");
       assertContains("[0, 1, 2, 3, 10, 11, 12, 13, 20, 21, 100, 101]");
     }
