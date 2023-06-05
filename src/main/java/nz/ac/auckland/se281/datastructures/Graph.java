@@ -2,6 +2,7 @@ package nz.ac.auckland.se281.datastructures;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -27,42 +28,30 @@ public class Graph<T extends Comparable<T>> {
   }
 
   public Set<T> getRoots() {
-    ArrayList<T> source = new ArrayList<T>();
-    ArrayList<T> destination = new ArrayList<T>();
-    Set<T> equivalenceClass = new HashSet<T>();
-    Set<T> roots = new TreeSet<T>();
-    source = getSource();
-    destination = getDestination();
+    ArrayList<T> source = getSource();
+    ArrayList<T> destination = getDestination();
+    Set<T> equivalenceClass = new HashSet<>();
+    Set<T> roots = new TreeSet<>(new NumericalComparator());
+
     for (int i = 0; i < source.size(); i++) {
-      if (source.get(i) == destination.get(i)
-          && Collections.frequency(source, source.get(i)) == 1) {
-        roots.add(source.get(i));
+      T src = source.get(i);
+      T dest = destination.get(i);
+      if (src == dest && Collections.frequency(source, src) == 1) {
+        roots.add(src);
       }
     }
+
     for (T vertex : verticies) {
       if (!destination.contains(vertex) && source.contains(vertex)) {
         roots.add(vertex);
       }
-      for (int i = 0; i < source.size(); i++) {
-        equivalenceClass = getEquivalenceClass(source.get(i));
-      }
+
+      equivalenceClass = getEquivalenceClass(vertex);
       for (T equivalence : equivalenceClass) {
         roots.add(equivalence);
         break;
       }
     }
-    // // change roots to int
-    // Set<Integer> rootsInt = new TreeSet<Integer>();
-    // // order the ints smallest to biggest
-    // for (T root : roots) {
-    //   rootsInt.add(Integer.parseInt(root.toString()));
-    // }
-    // // change rootsInt back to set<T>
-    // Set<T> rootsT = new TreeSet<T>();
-    // // change it back
-    // for (Integer root : rootsInt) {
-    //   rootsT.add((T) root);
-    // }
 
     return roots;
   }
@@ -223,6 +212,7 @@ public class Graph<T extends Comparable<T>> {
 
   public List<T> iterativeDepthFirstSearch() {
     Set<T> roots = getRoots();
+    System.out.println(roots);
     List<T> traversalResult = new ArrayList<>();
     StackStructure<T> stack = new StackStructure<T>();
     ArrayList<T> source = new ArrayList<T>();
@@ -260,8 +250,16 @@ public class Graph<T extends Comparable<T>> {
         }
 
         Collections.sort(neighbors);
-        for (int i = neighbors.size() - 1; i >= 0; i--) {
-          stack.push(neighbors.get(i));
+        boolean smallestNeighborPushed = false;
+        for (T neighbor : neighbors) {
+          if (!smallestNeighborPushed) {
+            stack.push(neighbor);
+            smallestNeighborPushed = true;
+          } else {
+            if (!visited.contains(neighbor)) {
+              stack.push(neighbor);
+            }
+          }
         }
       }
     }
@@ -293,5 +291,15 @@ public class Graph<T extends Comparable<T>> {
       destination.add(edge.getDestination());
     }
     return destination;
+  }
+
+  class NumericalComparator implements Comparator<T> {
+    @Override
+    public int compare(T obj1, T obj2) {
+      // Assuming T is a numeric type, you can compare them using their numerical values
+      // Adjust this logic according to the actual type of T
+      return Double.compare(
+          Double.parseDouble(obj1.toString()), Double.parseDouble(obj2.toString()));
+    }
   }
 }
