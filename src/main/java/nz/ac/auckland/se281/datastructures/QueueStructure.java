@@ -2,6 +2,13 @@ package nz.ac.auckland.se281.datastructures;
 
 import java.util.LinkedList;
 
+/**
+ * This class represents a queue data structure that follows the First-In-First-Out (FIFO)
+ * principle. It allows elements of type T to be added at the rear and removed from the front of the
+ * queue.
+ *
+ * @param <T> the type of elements stored in the queue
+ */
 public class QueueStructure<T> {
 
   // Initializing the elements

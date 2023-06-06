@@ -23,9 +23,9 @@ public class Graph<T extends Comparable<T>> {
    * @param vertices the set of vertices in the graph
    * @param edges the set of edges in the graph
    */
-  private Set<T> verticies;
-
   private Set<Edge<T>> edges;
+
+  private Set<T> verticies;
 
   public Graph(Set<T> verticies, Set<Edge<T>> edges) {
     this.verticies = verticies;

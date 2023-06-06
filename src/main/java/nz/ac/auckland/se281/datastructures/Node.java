@@ -1,5 +1,11 @@
 package nz.ac.auckland.se281.datastructures;
 
+/**
+ * This class represents a node in a linked list or any other data structure that requires a
+ * node-like structure. It stores a value of type T and a reference to the next node in the structure.
+ *
+ * @param <T> the type of value stored in the node
+ */
 public class Node<T> {
 
   // Initializing the data and next node

@@ -1,5 +1,11 @@
 package nz.ac.auckland.se281.datastructures;
 
+/**
+ * This class represents a stack data structure that follows the Last-In-First-Out (LIFO) principle.
+ * It allows elements of type T to be added and removed from the top of the stack.
+ *
+ * @param <T> the type of elements stored in the stack
+ */
 public class StackStructure<T> {
 
   // Initializing the top and size
