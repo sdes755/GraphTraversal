@@ -2,44 +2,62 @@ package nz.ac.auckland.se281.datastructures;
 
 public class Node<T> {
 
-  // Initialising the data and next node
+  // Initializing the data and next node
 
   private T data;
   private Node<T> next;
 
-  // Creating the constructor
-
+  /**
+   * Constructs a new Node with the given data.
+   *
+   * @param data the data to be stored in the node
+   */
   public Node(T data) {
     this.data = data;
     this.next = null;
   }
 
-  // Getter for the data
-
+  /**
+   * Retrieves the data stored in this node.
+   *
+   * @return the data stored in the node
+   */
   public T getData() {
     return data;
   }
 
-  // Setter for the data
-
+  /**
+   * Sets the data to be stored in this node.
+   *
+   * @param data the data to be set
+   */
   public void setData(T data) {
     this.data = data;
   }
 
-  // Getter for the next node
-
+  /**
+   * Retrieves the next node in the linked list.
+   *
+   * @return the next node
+   */
   public Node<T> getNext() {
     return next;
   }
 
-  // Setter for the next node
-
+  /**
+   * Sets the next node in the linked list.
+   *
+   * @param next the next node to be set
+   */
   public void setNext(Node<T> next) {
     this.next = next;
   }
 
-  // Overide method for the toString representation of the node
-
+  /**
+   * Returns a string representation of the node.
+   *
+   * @return a string representation of the node's data
+   */
   @Override
   public String toString() {
     return data.toString();

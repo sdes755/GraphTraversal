@@ -17,14 +17,15 @@ import java.util.TreeSet;
  */
 public class Graph<T extends Comparable<T>> {
 
-  // intialise vertices and edges as well as checks for symmetry
-
-  private T check;
-  private T symmetric;
+  /**
+   * Initializes the Graph with the given set of vertices and edges.
+   *
+   * @param vertices the set of vertices in the graph
+   * @param edges the set of edges in the graph
+   */
   private Set<T> verticies;
-  private Set<Edge<T>> edges;
 
-  // Creating the constructor
+  private Set<Edge<T>> edges;
 
   public Graph(Set<T> verticies, Set<Edge<T>> edges) {
     this.verticies = verticies;
@@ -32,9 +33,9 @@ public class Graph<T extends Comparable<T>> {
   }
 
   /**
-   * This method gets the roots of the graphs
+   * Returns a set of root vertices in the graph.
    *
-   * @return Set<T>
+   * @return the set of root vertices
    */
   public Set<T> getRoots() {
     // Getting the sources and destination and initialising the sets and arraylists
@@ -74,9 +75,9 @@ public class Graph<T extends Comparable<T>> {
   }
 
   /**
-   * isReflexive checks the reflexivity of the graph
+   * Checks if the graph is reflexive.
    *
-   * @return boolean
+   * @return true if the graph is reflexive, false otherwise
    */
   public boolean isReflexive() {
 
@@ -104,9 +105,9 @@ public class Graph<T extends Comparable<T>> {
   }
 
   /**
-   * Checking if the graph is symmetric using the getSymmetric helper method.
+   * Checks if the graph is symmetric.
    *
-   * @return boolean
+   * @return true if the graph is symmetric, false otherwise
    */
   public boolean isSymmetric() {
     Set<T> reflexive = getSymmetric();
@@ -117,12 +118,10 @@ public class Graph<T extends Comparable<T>> {
   }
 
   /**
-   * isTransitive checks if the graph is transitive
+   * Checks if the graph is transitive.
    *
-   * @return boolean
+   * @return true if the graph is transitive, false otherwise
    */
-  // isTransitive checks if the graph is transitive
-
   public boolean isTransitive() {
 
     // Getting the sources and destinations and intialising.
@@ -161,9 +160,9 @@ public class Graph<T extends Comparable<T>> {
   }
 
   /**
-   * Checking if the graph is antisymmetric using the helper getSymmetric method
+   * Checks if the graph is antisymmetric.
    *
-   * @return boolean
+   * @return true if the graph is antisymmetric, false otherwise
    */
   public boolean isAntiSymmetric() {
     Set<T> reflexive = getSymmetric();
@@ -178,9 +177,9 @@ public class Graph<T extends Comparable<T>> {
   }
 
   /**
-   * Checking the equivalence of the graph
+   * Checks if the graph is an equivalence relation.
    *
-   * @return boolean
+   * @return true if the graph is an equivalence relation, false otherwise
    */
   public boolean isEquivalence() {
     if (isReflexive() && isSymmetric() && isTransitive()) {
@@ -191,10 +190,10 @@ public class Graph<T extends Comparable<T>> {
   }
 
   /**
-   * getEquivalenceClass get the equivalnce class of the graph for the inputted vertex
+   * Returns the equivalence class of a given vertex.
    *
-   * @param vertex
-   * @return Set<T>
+   * @param vertex the vertex to find the equivalence class for
+   * @return the set of vertices in the equivalence class
    */
   public Set<T> getEquivalenceClass(T vertex) {
 
@@ -221,9 +220,9 @@ public class Graph<T extends Comparable<T>> {
   }
 
   /**
-   * Runs an iterative breadth first search on the graph starting off at roots
+   * Performs an iterative breadth-first search traversal of the graph.
    *
-   * @return List<T>
+   * @return the list of vertices in the traversal order
    */
   public List<T> iterativeBreadthFirstSearch() {
 
@@ -277,9 +276,9 @@ public class Graph<T extends Comparable<T>> {
   }
 
   /**
-   * Runs a iterative depth first search on the graph starting off at rooots
+   * Performs an iterative depth-first search traversal of the graph.
    *
-   * @return List<T>
+   * @return the list of vertices in the traversal order
    */
   public List<T> iterativeDepthFirstSearch() {
 
@@ -339,9 +338,9 @@ public class Graph<T extends Comparable<T>> {
   }
 
   /**
-   * Recursive implementation of the breadth first search
+   * Performs a recursive breadth-first search traversal of the graph.
    *
-   * @return List<T>
+   * @return the list of vertices in the traversal order
    */
   public List<T> recursiveBreadthFirstSearch() {
     // Initialising the sets and arraylists
@@ -366,9 +365,9 @@ public class Graph<T extends Comparable<T>> {
   }
 
   /**
-   * Recursive implementation of the depth first search
+   * Performs a recursive depth-first search traversal of the graph.
    *
-   * @return List<T>
+   * @return the list of vertices in the traversal order
    */
   public List<T> recursiveDepthFirstSearch() {
 
@@ -393,8 +392,11 @@ public class Graph<T extends Comparable<T>> {
     return traversalResult;
   }
 
-  // helper methods to get Source
-
+  /**
+   * Retrieves the source vertices of the edges in the graph.
+   *
+   * @return an ArrayList containing the source vertices
+   */
   public ArrayList<T> getSource() {
     ArrayList<T> source = new ArrayList<T>();
     for (Edge<T> edge : edges) {
@@ -403,8 +405,11 @@ public class Graph<T extends Comparable<T>> {
     return source;
   }
 
-  // helper methods to get Destination
-
+  /**
+   * Retrieves the destination vertices of the edges in the graph.
+   *
+   * @return an ArrayList containing the destination vertices
+   */
   public ArrayList<T> getDestination() {
     ArrayList<T> destination = new ArrayList<T>();
     for (Edge<T> edge : edges) {
@@ -413,9 +418,19 @@ public class Graph<T extends Comparable<T>> {
     return destination;
   }
 
-  // Online suggested method to help order the roots and classes which need to be numeric properly.
-
+  /**
+   * A comparator class for comparing numerical values of elements in the graph. Suggested by online
+   * resources
+   */
   class NumericalComparator implements Comparator<T> {
+
+    /**
+     * Compares two numerical values.
+     *
+     * @param obj1 the first numerical value
+     * @param obj2 the second numerical value
+     * @return the comparison result (-1 if obj1 < obj2, 0 if obj1 == obj2, 1 if obj1 > obj2)
+     */
     @Override
     public int compare(T obj1, T obj2) {
 
@@ -427,8 +442,16 @@ public class Graph<T extends Comparable<T>> {
     }
   }
 
-  // Helper method for the recurisve breadth first search
-
+  /**
+   * Helper method for performing recursive breadth-first search (BFS) traversal of the graph.
+   *
+   * @param vertex the current vertex being visited
+   * @param source the list of source vertices of the edges
+   * @param destination the list of destination vertices of the edges
+   * @param queue the queue data structure for BFS traversal
+   * @param visited the list of visited vertices
+   * @param bfsTraversal the list for storing the BFS traversal result
+   */
   public void recursiveBreadthFirstSearchHelper(
       T vertex,
       ArrayList<T> source,
@@ -466,8 +489,16 @@ public class Graph<T extends Comparable<T>> {
     }
   }
 
-  // Helper method for the recursive depth first search
-
+  /**
+   * Helper method for performing recursive depth-first search (DFS) traversal of the graph.
+   *
+   * @param vertex the current vertex being visited
+   * @param traversalResult the list for storing the DFS traversal result
+   * @param visited the list of visited vertices
+   * @param source the list of source vertices of the edges
+   * @param destination the list of destination vertices of the edges
+   * @param stack the stack data structure for DFS traversal
+   */
   public void recursiveDepthFirstSearchHelper(
       T vertex,
       List<T> traversalResult,
@@ -514,14 +545,18 @@ public class Graph<T extends Comparable<T>> {
     }
   }
 
-  // helper method for the symmetry methods.
-
+  /**
+   * Retrieves a set of vertices that have symmetric edges in the graph.
+   *
+   * @return a Set containing the symmetric vertices
+   */
   public Set<T> getSymmetric() {
     // Initializing variables
     ArrayList<T> destination = getDestination();
     ArrayList<T> source = getSource();
     Set<T> reflexive = new HashSet<T>();
-
+    T check;
+    T symmetric;
     // Running a for loop to check if it has a symmetric edge
 
     for (int j = 0; j < source.size(); j++) {

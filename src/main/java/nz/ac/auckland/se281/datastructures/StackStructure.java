@@ -2,20 +2,22 @@ package nz.ac.auckland.se281.datastructures;
 
 public class StackStructure<T> {
 
-  // Initialising the top and size
+  // Initializing the top and size
 
   private Node<T> top;
   private int size;
 
-  // Creating the constructor
-
+  /** Constructs an empty stack. */
   public StackStructure() {
     top = null;
     size = 0;
   }
 
-  // Creating the push method to push element to the top of the stack
-
+  /**
+   * Pushes an element onto the top of the stack.
+   *
+   * @param data the data to be pushed onto the stack
+   */
   public void push(T data) {
     Node<T> newNode = new Node<T>(data);
     newNode.setNext(top);
@@ -23,75 +25,83 @@ public class StackStructure<T> {
     size++;
   }
 
-  // Creating the pop method
-
+  /**
+   * Removes and returns the element at the top of the stack.
+   *
+   * @return the element at the top of the stack
+   * @throws IllegalStateException if the stack is empty
+   */
   public T pop() {
     if (isEmpty()) {
       throw new IllegalStateException("Stack is empty");
     }
-    // Removes the first value of the stack and size decreases
-
     T poppedData = top.getData();
     top = top.getNext();
     size--;
     return poppedData;
   }
 
-  // Returns the top of the stack
-
+  /**
+   * Returns the element at the top of the stack without removing it.
+   *
+   * @return the element at the top of the stack
+   * @throws IllegalStateException if the stack is empty
+   */
   public T peek() {
     if (isEmpty()) {
       throw new IllegalStateException("Stack is empty");
     }
-
     return top.getData();
   }
 
-  // Returns the size of the stack
-
+  /**
+   * Returns the number of elements in the stack.
+   *
+   * @return the number of elements in the stack
+   */
   public int size() {
     return size;
   }
 
-  // Checks if the stack is empty
-
+  /**
+   * Checks whether the stack is empty.
+   *
+   * @return true if the stack is empty, false otherwise
+   */
   public boolean isEmpty() {
     return size == 0;
   }
 
-  // Overide method for the toString representation of the stack
-
+  /**
+   * Returns a string representation of the stack.
+   *
+   * @return a string representation of the stack
+   */
   @Override
   public String toString() {
-
-    // Creating a string builder to append the elements of the stack
-
+    // Creating a string builder
     StringBuilder sb = new StringBuilder();
     Node<T> current = top;
-
-    // Creating the string to start of with square brackets
-
+    // Appending the data to the string builder starting off with a square bracket
     sb.append("[");
     while (current != null) {
 
-      // If the next element is null then it will not append a comma
+      // If the next node is null, do not append a comma
 
       if (current.getNext() == null) {
         sb.append(current.getData());
       } else {
 
-        // If the next element is not null then it will append a comma
+        // If the next node is not null, append a comma
 
         sb.append(current.getData()).append(", ");
       }
 
-      // Iterates through the stack
-
+      // Moving to the next node
       current = current.getNext();
     }
 
-    // Appending the end of the string with square brackets
-
+    // Appending the closing square bracket
     sb.append("]");
     return sb.toString();
   }
