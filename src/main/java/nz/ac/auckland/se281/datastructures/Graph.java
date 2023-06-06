@@ -334,25 +334,25 @@ public class Graph<T extends Comparable<T>> {
 
         // Checking if all the neighbours of the current vertex is explored
 
-        boolean allNeighborsVisited = true;
-        List<T> neighbors = new ArrayList<>();
+        boolean allNeighboursVisited = true;
+        List<T> neighbours = new ArrayList<>();
         for (int i = 0; i < source.size(); i++) {
           if (source.get(i).equals(vertex) && !visited.contains(destination.get(i))) {
-            neighbors.add(destination.get(i));
+            neighbours.add(destination.get(i));
           }
         }
 
-        for (T neighbor : neighbors) {
+        for (T neighbor : neighbours) {
           if (!visited.contains(neighbor)) {
             stack.push(neighbor);
-            allNeighborsVisited = false;
+            allNeighboursVisited = false;
             break;
           }
         }
 
         // If explored, then we pop the stack
 
-        if (allNeighborsVisited) {
+        if (allNeighboursVisited) {
           stack.pop();
         }
       }
@@ -516,20 +516,20 @@ public class Graph<T extends Comparable<T>> {
 
     // Checking if all the neighbours of the current vertex is explored
 
-    List<T> neighbors = new ArrayList<>();
+    List<T> neighbours = new ArrayList<>();
     for (int i = 0; i < source.size(); i++) {
       if (source.get(i).equals(vertex) && !visited.contains(destination.get(i))) {
-        neighbors.add(destination.get(i));
+        neighbours.add(destination.get(i));
       }
     }
 
     // If not, then we push the vertex to the stack
 
-    for (T neighbor : neighbors) {
-      if (!visited.contains(neighbor)) {
-        stack.push(neighbor);
+    for (T neighbour : neighbours) {
+      if (!visited.contains(neighbour)) {
+        stack.push(neighbour);
         recursiveDepthFirstSearchHelper(
-            neighbor, traversalResult, visited, source, destination, stack);
+            neighbour, traversalResult, visited, source, destination, stack);
       }
     }
 
