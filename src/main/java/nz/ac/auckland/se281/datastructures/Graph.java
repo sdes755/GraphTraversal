@@ -18,6 +18,30 @@ import java.util.TreeSet;
 public class Graph<T extends Comparable<T>> {
 
   /**
+   * A comparator class for comparing numerical values of elements in the graph. Suggested by online
+   * resources
+   */
+  class NumericalComparator implements Comparator<T> {
+
+    /**
+     * Compares two numerical values.
+     *
+     * @param obj1 the first numerical value
+     * @param obj2 the second numerical value
+     * @return the comparison result (-1 if obj1 < obj2, 0 if obj1 == obj2, 1 if obj1 > obj2)
+     */
+    @Override
+    public int compare(T obj1, T obj2) {
+
+      // Assuming T is a numeric type, you can compare them using their numerical values
+      // Adjust this logic according to the actual type of T
+
+      return Double.compare(
+          Double.parseDouble(obj1.toString()), Double.parseDouble(obj2.toString()));
+    }
+  }
+
+  /**
    * Initializes the Graph with the given set of vertices and edges.
    *
    * @param vertices the set of vertices in the graph
@@ -416,30 +440,6 @@ public class Graph<T extends Comparable<T>> {
       destination.add(edge.getDestination());
     }
     return destination;
-  }
-
-  /**
-   * A comparator class for comparing numerical values of elements in the graph. Suggested by online
-   * resources
-   */
-  class NumericalComparator implements Comparator<T> {
-
-    /**
-     * Compares two numerical values.
-     *
-     * @param obj1 the first numerical value
-     * @param obj2 the second numerical value
-     * @return the comparison result (-1 if obj1 < obj2, 0 if obj1 == obj2, 1 if obj1 > obj2)
-     */
-    @Override
-    public int compare(T obj1, T obj2) {
-
-      // Assuming T is a numeric type, you can compare them using their numerical values
-      // Adjust this logic according to the actual type of T
-
-      return Double.compare(
-          Double.parseDouble(obj1.toString()), Double.parseDouble(obj2.toString()));
-    }
   }
 
   /**
