@@ -16,27 +16,36 @@ import java.util.TreeSet;
  * @param <T> The type of each vertex, that have a total ordering.
  */
 public class Graph<T extends Comparable<T>> {
+
   // intialise vertices and edges as well as checks for symmetry
-  private Set<T> verticies;
-  private Set<Edge<T>> edges;
+
   private T check;
   private T symmetric;
+  private Set<T> verticies;
+  private Set<Edge<T>> edges;
 
   // Creating the constructor
+
   public Graph(Set<T> verticies, Set<Edge<T>> edges) {
     this.verticies = verticies;
     this.edges = edges;
   }
 
-  // This method gets the roots of the graphs
+  /**
+   * This method gets the roots of the graphs
+   *
+   * @return Set<T>
+   */
   public Set<T> getRoots() {
     // Getting the sources and destination and initialising the sets and arraylists
+
     ArrayList<T> source = getSource();
     ArrayList<T> destination = getDestination();
-    Set<T> equivalenceClass = new HashSet<>();
     Set<T> roots = new TreeSet<>(new NumericalComparator());
+
     // Running  a for loop to check for self loops, and if it is a self loop, add it to the roots.
     // But it must only have a self loop, no out going connections.
+
     for (int i = 0; i < source.size(); i++) {
       T src = source.get(i);
       T dest = destination.get(i);
@@ -44,13 +53,17 @@ public class Graph<T extends Comparable<T>> {
         roots.add(src);
       }
     }
+
     // Checking if it is a source, but not a destination
+
     for (T vertex : verticies) {
       if (!destination.contains(vertex) && source.contains(vertex)) {
         roots.add(vertex);
       }
+
       // Getting the smallest value in the equivalance class
-      equivalenceClass = getEquivalenceClass(vertex);
+
+      Set<T> equivalenceClass = getEquivalenceClass(vertex);
       for (T equivalence : equivalenceClass) {
         roots.add(equivalence);
         break;
@@ -60,19 +73,29 @@ public class Graph<T extends Comparable<T>> {
     return roots;
   }
 
-  // isReflexive checks the reflexivity of the graph
+  /**
+   * isReflexive checks the reflexivity of the graph
+   *
+   * @return boolean
+   */
   public boolean isReflexive() {
+
     // Getting sources and destination and initialising
+
     ArrayList<T> destination = getDestination();
     ArrayList<T> source = getSource();
     Set<T> selfloops = new HashSet<T>();
+
     // Checking if the graph is reflexive and for self loops
+
     for (int i = 0; i < source.size(); i++) {
       if (source.get(i) == destination.get(i)) {
         selfloops.add(source.get(i));
       }
     }
+
     // If the selfoops are equal to the vertices, then it is reflexive
+
     if (selfloops.equals(verticies)) {
       return true;
     } else {
@@ -80,23 +103,38 @@ public class Graph<T extends Comparable<T>> {
     }
   }
 
-  // Checking if the graph is symmetric using the helper method.
+  /**
+   * Checking if the graph is symmetric using the getSymmetric helper method.
+   *
+   * @return boolean
+   */
   public boolean isSymmetric() {
-    Set<T> reflexive = new HashSet<T>();
-    reflexive = getSymmetric();
+    Set<T> reflexive = getSymmetric();
+
     // If the symmetric is equal to the vertices, then it is symmetric
+
     return reflexive.equals(verticies);
   }
 
+  /**
+   * isTransitive checks if the graph is transitive
+   *
+   * @return boolean
+   */
   // isTransitive checks if the graph is transitive
+
   public boolean isTransitive() {
+
     // Getting the sources and destinations and intialising.
+
     ArrayList<T> destination = getDestination();
     ArrayList<T> source = getSource();
     Set<T> transitive = new HashSet<T>();
+
     // check if the graph is transitive. So if the source is equal to a destination and that
     // destination is a source to another destination,
     // if the original source is connected to it, then it is transitive.
+
     for (int i = 0; i < source.size(); i++) {
       if (source.get(i) != destination.get(i)) {
         for (int j = 0; j < source.size(); j++) {
@@ -112,7 +150,9 @@ public class Graph<T extends Comparable<T>> {
         }
       }
     }
+
     // If the graph is not transitive, then return false
+
     if (transitive.size() == 0) {
       return false;
     } else {
@@ -120,11 +160,16 @@ public class Graph<T extends Comparable<T>> {
     }
   }
 
-  // Checking if the graph is antisymmetric using the helper nethod
+  /**
+   * Checking if the graph is antisymmetric using the helper getSymmetric method
+   *
+   * @return boolean
+   */
   public boolean isAntiSymmetric() {
-    Set<T> reflexive = new HashSet<T>();
-    reflexive = getSymmetric();
+    Set<T> reflexive = getSymmetric();
+
     // If the graph has no symmetric values, then it is antisymmetric
+
     if (reflexive.size() == 0) {
       return true;
     } else {
@@ -132,7 +177,11 @@ public class Graph<T extends Comparable<T>> {
     }
   }
 
-  // Checking the equivalence of the graph
+  /**
+   * Checking the equivalence of the graph
+   *
+   * @return boolean
+   */
   public boolean isEquivalence() {
     if (isReflexive() && isSymmetric() && isTransitive()) {
       return true;
@@ -141,17 +190,28 @@ public class Graph<T extends Comparable<T>> {
     }
   }
 
-  // getEquivalenceClass get the equivalnce class of the graph
+  /**
+   * getEquivalenceClass get the equivalnce class of the graph for the inputted vertex
+   *
+   * @param vertex
+   * @return Set<T>
+   */
   public Set<T> getEquivalenceClass(T vertex) {
+
     // Initialising the sets and arraylists
+
     Set<T> equivalenceClass = new TreeSet<>(new NumericalComparator());
     ArrayList<T> source = getSource();
     ArrayList<T> destination = getDestination();
+
     // First check is to make sure the graph is equivalent.
+
     if (!isEquivalence()) {
       return equivalenceClass;
     }
+
     // Next we add all the connections to the inputted vertex.
+
     for (int i = 0; i < source.size(); i++) {
       if (vertex.equals(source.get(i))) {
         equivalenceClass.add(destination.get(i));
@@ -160,9 +220,15 @@ public class Graph<T extends Comparable<T>> {
     return equivalenceClass;
   }
 
-  // Runs an iterative breadth first search on the graph
+  /**
+   * Runs an iterative breadth first search on the graph starting off at roots
+   *
+   * @return List<T>
+   */
   public List<T> iterativeBreadthFirstSearch() {
+
     // Initialising the sets and arraylists
+
     Set<T> roots = getRoots();
 
     ArrayList<T> source = getSource();
@@ -170,7 +236,9 @@ public class Graph<T extends Comparable<T>> {
     List<T> traversal = new ArrayList<T>();
     ArrayList<T> visited = new ArrayList<T>();
     QueueStructure<T> queue = new QueueStructure<T>();
+
     // Runnign through each root and adding it to the queue
+
     for (T root : roots) {
       for (int i = 0; i < source.size(); i++) {
         if (source.get(i).equals(root)) {
@@ -178,16 +246,22 @@ public class Graph<T extends Comparable<T>> {
           break;
         }
       }
+
       // Ensuring the traversal runs till the queue is empty, so it traverses each vertex
+
       while (!queue.isEmpty()) {
         T vertex = queue.peek();
         queue.dequeue();
+
         // Once a vertex is visited it is added to the list
+
         if (!visited.contains(vertex)) {
           visited.add(vertex);
           traversal.add(vertex);
         }
+
         // Checking if it is the same vertex as the source. If it is, then it is added to the queue
+
         for (int i = 0; i < source.size(); i++) {
           if (source.get(i).hashCode() == vertex.hashCode()) {
             if (source.get(i).equals(vertex)) {
@@ -202,27 +276,41 @@ public class Graph<T extends Comparable<T>> {
     return traversal;
   }
 
-  // Runs a iterative depth first search on the graph
+  /**
+   * Runs a iterative depth first search on the graph starting off at rooots
+   *
+   * @return List<T>
+   */
   public List<T> iterativeDepthFirstSearch() {
+
     // Initialising the sets and arraylists
+
     Set<T> roots = getRoots();
     List<T> traversalResult = new ArrayList<>();
     StackStructure<T> stack = new StackStructure<T>();
     ArrayList<T> source = getSource();
     ArrayList<T> destination = getDestination();
     ArrayList<T> visited = new ArrayList<>();
+
     // Running through each root and adding it to the stack
+
     for (T root : roots) {
       stack.push(root);
+
       // Ensuring the traversal runs till the stack is empty, so it traverses each vertex
+
       while (!stack.isEmpty()) {
         T vertex = stack.peek();
+
         // Once a vertex is visited it is added to the list
+
         if (!visited.contains(vertex)) {
           visited.add(vertex);
           traversalResult.add(vertex);
         }
+
         // Checking if all the neighbours of the current vertex is explored
+
         boolean allNeighborsVisited = true;
         List<T> neighbors = new ArrayList<>();
         for (int i = 0; i < source.size(); i++) {
@@ -238,7 +326,9 @@ public class Graph<T extends Comparable<T>> {
             break;
           }
         }
+
         // If explored, then we pop the stack
+
         if (allNeighborsVisited) {
           stack.pop();
         }
@@ -248,14 +338,25 @@ public class Graph<T extends Comparable<T>> {
     return traversalResult;
   }
 
-  // Recursive implementation of the breadth first search
+  /**
+   * Recursive implementation of the breadth first search
+   *
+   * @return List<T>
+   */
   public List<T> recursiveBreadthFirstSearch() {
+    // Initialising the sets and arraylists
+
     Set<T> roots = getRoots();
     ArrayList<T> source = getSource();
     ArrayList<T> destination = getDestination();
     List<T> bfsTraversal = new ArrayList<T>();
     ArrayList<T> visited = new ArrayList<T>();
+
+    // Initialising the queue using our implementation of queue
+
     QueueStructure<T> queue = new QueueStructure<T>();
+
+    // Running through each root and for each root the helper method is called
 
     for (T root : roots) {
       recursiveBreadthFirstSearchHelper(root, source, destination, queue, visited, bfsTraversal);
@@ -264,14 +365,26 @@ public class Graph<T extends Comparable<T>> {
     return bfsTraversal;
   }
 
-  // Recursive implementation of the depth first search
+  /**
+   * Recursive implementation of the depth first search
+   *
+   * @return List<T>
+   */
   public List<T> recursiveDepthFirstSearch() {
+
+    // Initialising the sets and arraylists
+
     Set<T> roots = getRoots();
     List<T> traversalResult = new ArrayList<>();
     ArrayList<T> source = getSource();
     ArrayList<T> destination = getDestination();
     ArrayList<T> visited = new ArrayList<>();
+
+    // Initialising the stack using our implementation of stack
+
     StackStructure<T> stack = new StackStructure<T>();
+
+    // Running through each root and for each root the helper method is called
 
     for (T root : roots) {
       recursiveDepthFirstSearchHelper(root, traversalResult, visited, source, destination, stack);
@@ -281,6 +394,7 @@ public class Graph<T extends Comparable<T>> {
   }
 
   // helper methods to get Source
+
   public ArrayList<T> getSource() {
     ArrayList<T> source = new ArrayList<T>();
     for (Edge<T> edge : edges) {
@@ -290,6 +404,7 @@ public class Graph<T extends Comparable<T>> {
   }
 
   // helper methods to get Destination
+
   public ArrayList<T> getDestination() {
     ArrayList<T> destination = new ArrayList<T>();
     for (Edge<T> edge : edges) {
@@ -299,17 +414,21 @@ public class Graph<T extends Comparable<T>> {
   }
 
   // Online suggested method to help order the roots and classes which need to be numeric properly.
+
   class NumericalComparator implements Comparator<T> {
     @Override
     public int compare(T obj1, T obj2) {
+
       // Assuming T is a numeric type, you can compare them using their numerical values
       // Adjust this logic according to the actual type of T
+
       return Double.compare(
           Double.parseDouble(obj1.toString()), Double.parseDouble(obj2.toString()));
     }
   }
 
   // Helper method for the recurisve breadth first search
+
   public void recursiveBreadthFirstSearchHelper(
       T vertex,
       ArrayList<T> source,
@@ -317,12 +436,16 @@ public class Graph<T extends Comparable<T>> {
       QueueStructure<T> queue,
       ArrayList<T> visited,
       List<T> bfsTraversal) {
+
     // Once a vertex is visited it is added to the list
+
     if (!visited.contains(vertex)) {
       visited.add(vertex);
       bfsTraversal.add(vertex);
     }
+
     // Checking if it is the same vertex as the source. If it is, then it is added to the queue
+
     for (int i = 0; i < source.size(); i++) {
       if (source.get(i).hashCode() == vertex.hashCode() && source.get(i).equals(vertex)) {
         T destinationVertex = destination.get(i);
@@ -331,8 +454,10 @@ public class Graph<T extends Comparable<T>> {
         }
       }
     }
+
     // Checking if the queue is empty, if not then we dequeue the next vertex and run the method
     // again recursively
+
     if (!queue.isEmpty()) {
       T nextVertex = queue.peek();
       queue.dequeue();
@@ -342,6 +467,7 @@ public class Graph<T extends Comparable<T>> {
   }
 
   // Helper method for the recursive depth first search
+
   public void recursiveDepthFirstSearchHelper(
       T vertex,
       List<T> traversalResult,
@@ -349,19 +475,25 @@ public class Graph<T extends Comparable<T>> {
       ArrayList<T> source,
       ArrayList<T> destination,
       StackStructure<T> stack) {
+
     // Once a vertex is visited it is added to the list
+
     if (!visited.contains(vertex)) {
       visited.add(vertex);
       traversalResult.add(vertex);
     }
+
     // Checking if all the neighbours of the current vertex is explored
+
     List<T> neighbors = new ArrayList<>();
     for (int i = 0; i < source.size(); i++) {
       if (source.get(i).equals(vertex) && !visited.contains(destination.get(i))) {
         neighbors.add(destination.get(i));
       }
     }
+
     // If not, then we push the vertex to the stack
+
     for (T neighbor : neighbors) {
       if (!visited.contains(neighbor)) {
         stack.push(neighbor);
@@ -369,7 +501,9 @@ public class Graph<T extends Comparable<T>> {
             neighbor, traversalResult, visited, source, destination, stack);
       }
     }
+
     // If explored, then we pop the stack and run the method again recursively
+
     if (!stack.isEmpty()) {
       stack.pop();
       if (!stack.isEmpty()) {
@@ -381,12 +515,15 @@ public class Graph<T extends Comparable<T>> {
   }
 
   // helper method for the symmetry methods.
+
   public Set<T> getSymmetric() {
     // Initializing variables
     ArrayList<T> destination = getDestination();
     ArrayList<T> source = getSource();
     Set<T> reflexive = new HashSet<T>();
+
     // Running a for loop to check if it has a symmetric edge
+
     for (int j = 0; j < source.size(); j++) {
       for (int i = 0; i < source.size(); i++) {
         check = source.get(j);
